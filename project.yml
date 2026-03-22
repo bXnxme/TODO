@@ -1,0 +1,72 @@
+name: TODO
+options:
+  bundleIdPrefix: com.polzovatel
+configs:
+  Debug: debug
+  Release: release
+settings:
+  base:
+    SWIFT_VERSION: 6.0
+    CURRENT_PROJECT_VERSION: 1
+    MARKETING_VERSION: 1.0
+targets:
+  TODOCore:
+    type: framework
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - Sources/TODOCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.polzovatel.todo.core
+        GENERATE_INFOPLIST_FILE: YES
+        DEFINES_MODULE: YES
+        SKIP_INSTALL: YES
+  TODOApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - TODOApp/App
+      - TODOApp/Assembly
+      - TODOApp/TaskList
+      - TODOApp/TaskDetail
+    resources:
+      - TODOApp/Resources
+    dependencies:
+      - target: TODOCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.polzovatel.todo.app
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: TODO
+        INFOPLIST_KEY_LSRequiresIPhoneOS: YES
+        INFOPLIST_KEY_UILaunchStoryboardName: LaunchScreen
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+        CODE_SIGN_STYLE: Automatic
+        TARGETED_DEVICE_FAMILY: 1,2
+  TODOCoreTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - Tests/TODOCoreTests
+    dependencies:
+      - target: TODOCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.polzovatel.todo.core.tests
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  TODO:
+    build:
+      targets:
+        TODOApp: all
+        TODOCore: [test]
+        TODOCoreTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - TODOCoreTests
