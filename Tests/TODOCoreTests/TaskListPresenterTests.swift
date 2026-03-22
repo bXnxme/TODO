@@ -135,13 +135,57 @@ final class TaskListPresenterTests: XCTestCase {
     }
 
     @MainActor
+    func testDidDeleteTaskRemovesItemFromViewImmediatelyAndRequestsInteractorDeletion() {
+        let view = ViewSpy()
+        let interactor = InteractorSpy()
+        let router = RouterSpy()
+        let presenter = TaskListPresenter(
+            view: view,
+            interactor: interactor,
+            router: router,
+            dateFormatter: FormatterSpy(),
+            searchDelay: 0
+        )
+        let firstTask = TaskItem(
+            id: UUID(),
+            remoteID: nil,
+            title: "First",
+            details: "",
+            createdAt: Date(),
+            isCompleted: false
+        )
+        let secondTask = TaskItem(
+            id: UUID(),
+            remoteID: nil,
+            title: "Second",
+            details: "",
+            createdAt: Date(),
+            isCompleted: false
+        )
+
+        presenter.didLoadTasks([firstTask, secondTask])
+        presenter.didDeleteTask(at: 0)
+
+        XCTAssertEqual(interactor.deletedTaskID, firstTask.id)
+        XCTAssertEqual(view.deletedIndices, [0])
+        XCTAssertEqual(view.displayedTasks.map(\.id), [secondTask.id])
+    }
+
+    @MainActor
     private final class ViewSpy: TaskListView {
         var displayedTasks: [TaskListItemViewModel] = []
+        var deletedIndices: [Int] = []
         var loadingStates: [Bool] = []
         var displayedError: String?
 
         func display(tasks: [TaskListItemViewModel]) {
             displayedTasks = tasks
+        }
+
+        func deleteTask(at index: Int) {
+            deletedIndices.append(index)
+            guard displayedTasks.indices.contains(index) else { return }
+            displayedTasks.remove(at: index)
         }
 
         func displayLoading(_ isLoading: Bool) {
@@ -156,6 +200,7 @@ final class TaskListPresenterTests: XCTestCase {
     @MainActor
     private final class InteractorSpy: TaskListInteractorInput {
         var lastSearchQuery: String?
+        var deletedTaskID: UUID?
         var updatedCompletion: (taskID: UUID, isCompleted: Bool)?
 
         func loadInitialData() {}
@@ -165,7 +210,9 @@ final class TaskListPresenterTests: XCTestCase {
             lastSearchQuery = query
         }
 
-        func deleteTask(id: UUID) {}
+        func deleteTask(id: UUID) {
+            deletedTaskID = id
+        }
 
         func updateCompletion(taskID: UUID, isCompleted: Bool) {
             updatedCompletion = (taskID, isCompleted)

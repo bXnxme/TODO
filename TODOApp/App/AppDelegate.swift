@@ -9,8 +9,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        let navigationController = UINavigationController()
-        navigationController.setNavigationBarHidden(true, animated: false)
+        let navigationController = RootNavigationController()
         let rootViewController = TaskListBuilder.build(
             navigationController: navigationController,
             dependencies: dependencies

@@ -19,6 +19,8 @@ final class TaskListViewController: UIViewController {
     private let refreshControl = UIRefreshControl()
     private var bottomBarHeightConstraint: NSLayoutConstraint?
 
+    private let bottomBarContentHeight: CGFloat = 36
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
     }
@@ -37,6 +39,11 @@ final class TaskListViewController: UIViewController {
     private func configureUI() {
         view.backgroundColor = AppTheme.background
         view.insetsLayoutMarginsFromSafeArea = false
+
+        let dismissKeyboardTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleBackgroundTapped))
+        dismissKeyboardTapGesture.cancelsTouchesInView = false
+        dismissKeyboardTapGesture.delegate = self
+        view.addGestureRecognizer(dismissKeyboardTapGesture)
 
         titleLabel.text = "Задачи"
         titleLabel.font = UIFont.systemFont(ofSize: 42, weight: .bold)
@@ -80,6 +87,7 @@ final class TaskListViewController: UIViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 90
         tableView.contentInsetAdjustmentBehavior = .never
+        tableView.keyboardDismissMode = .onDrag
         tableView.refreshControl = refreshControl
         tableView.contentInset = UIEdgeInsets(top: 4, left: 0, bottom: 0, right: 0)
         refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
@@ -120,7 +128,7 @@ final class TaskListViewController: UIViewController {
         composeButton.translatesAutoresizingMaskIntoConstraints = false
         loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
 
-        let bottomBarHeightConstraint = bottomBarView.heightAnchor.constraint(equalToConstant: 58)
+        let bottomBarHeightConstraint = bottomBarView.heightAnchor.constraint(equalToConstant: bottomBarContentHeight)
         self.bottomBarHeightConstraint = bottomBarHeightConstraint
 
         NSLayoutConstraint.activate([
@@ -158,13 +166,13 @@ final class TaskListViewController: UIViewController {
             bottomBarView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             bottomBarHeightConstraint,
 
-            taskCountLabel.topAnchor.constraint(equalTo: bottomBarView.topAnchor, constant: 12),
+            taskCountLabel.centerYAnchor.constraint(equalTo: bottomBarView.topAnchor, constant: bottomBarContentHeight / 2),
             taskCountLabel.centerXAnchor.constraint(equalTo: bottomBarView.centerXAnchor),
 
             composeButton.centerYAnchor.constraint(equalTo: taskCountLabel.centerYAnchor),
             composeButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -18),
-            composeButton.widthAnchor.constraint(equalToConstant: 32),
-            composeButton.heightAnchor.constraint(equalToConstant: 32),
+            composeButton.widthAnchor.constraint(equalToConstant: 28),
+            composeButton.heightAnchor.constraint(equalToConstant: 28),
 
             loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
@@ -192,6 +200,11 @@ final class TaskListViewController: UIViewController {
         searchTextField.becomeFirstResponder()
     }
 
+    @objc
+    private func handleBackgroundTapped() {
+        view.endEditing(true)
+    }
+
     private func showAlert(message: String) {
         let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
@@ -200,6 +213,21 @@ final class TaskListViewController: UIViewController {
 
     private func updateTaskCount() {
         taskCountLabel.text = AppTheme.taskCountText(for: items.count)
+    }
+
+    private func updateTaskCount(animated: Bool) {
+        guard animated else {
+            updateTaskCount()
+            return
+        }
+
+        UIView.transition(
+            with: taskCountLabel,
+            duration: 0.2,
+            options: [.transitionCrossDissolve, .allowUserInteraction]
+        ) { [weak self] in
+            self?.updateTaskCount()
+        }
     }
 
     private func shareTask(at index: Int) {
@@ -221,16 +249,27 @@ final class TaskListViewController: UIViewController {
 
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
-        bottomBarHeightConstraint?.constant = 58 + view.safeAreaInsets.bottom
+        bottomBarHeightConstraint?.constant = bottomBarContentHeight + view.safeAreaInsets.bottom
     }
 }
 
 extension TaskListViewController: TaskListView {
     func display(tasks: [TaskListItemViewModel]) {
         items = tasks
-        updateTaskCount()
+        updateTaskCount(animated: false)
         tableView.reloadData()
         refreshControl.endRefreshing()
+    }
+
+    func deleteTask(at index: Int) {
+        guard items.indices.contains(index) else { return }
+
+        tableView.performBatchUpdates {
+            items.remove(at: index)
+            tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .fade)
+        } completion: { [weak self] _ in
+            self?.updateTaskCount(animated: true)
+        }
     }
 
     func displayLoading(_ isLoading: Bool) {
@@ -337,6 +376,18 @@ extension TaskListViewController: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        return true
+    }
+}
+
+extension TaskListViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        guard let touchedView = touch.view else { return true }
+
+        if touchedView.isDescendant(of: searchContainerView) || touchedView is UITextField {
+            return false
+        }
+
         return true
     }
 }

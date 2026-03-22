@@ -9,6 +9,8 @@ settings:
     SWIFT_VERSION: 6.0
     CURRENT_PROJECT_VERSION: 1
     MARKETING_VERSION: 1.0
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    STRING_CATALOG_GENERATE_SYMBOLS: YES
 targets:
   TODOCore:
     type: framework
@@ -18,6 +20,7 @@ targets:
       - Sources/TODOCore
     settings:
       base:
+        ENABLE_MODULE_VERIFIER: YES
         PRODUCT_BUNDLE_IDENTIFIER: com.polzovatel.todo.core
         GENERATE_INFOPLIST_FILE: YES
         DEFINES_MODULE: YES
@@ -37,6 +40,8 @@ targets:
       - target: TODOCore
     settings:
       base:
+        ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: YES
+        DEVELOPMENT_TEAM: C4HJ5GT7MQ
         PRODUCT_BUNDLE_IDENTIFIER: com.polzovatel.todo.app
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: TODO
@@ -44,7 +49,7 @@ targets:
         INFOPLIST_KEY_UILaunchStoryboardName: LaunchScreen
         INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
         CODE_SIGN_STYLE: Automatic
-        TARGETED_DEVICE_FAMILY: 1,2
+        TARGETED_DEVICE_FAMILY: 1
   TODOCoreTests:
     type: bundle.unit-test
     platform: iOS

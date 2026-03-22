@@ -23,7 +23,7 @@ public final class TaskListInteractor: TaskListInteractorInput {
                     self.output?.didReceiveError(error)
                 }
 
-                self.fetchTasks(showLoading: false)
+                self.fetchTasks(showLoading: false, hideLoadingOnCompletion: true)
             }
         }
     }
@@ -38,17 +38,16 @@ public final class TaskListInteractor: TaskListInteractorInput {
     }
 
     public func deleteTask(id: UUID) {
-        output?.didChangeLoading(true)
         repository.deleteTask(id: id) { [weak self] result in
             Task { @MainActor in
                 guard let self else { return }
 
                 switch result {
                 case .failure(let error):
-                    self.output?.didChangeLoading(false)
                     self.output?.didReceiveError(error)
+                    self.fetchTasks(showLoading: false, hideLoadingOnCompletion: false)
                 case .success:
-                    self.fetchTasks(showLoading: false)
+                    break
                 }
             }
         }
@@ -62,7 +61,7 @@ public final class TaskListInteractor: TaskListInteractorInput {
                 switch result {
                 case .failure(let error):
                     self.output?.didReceiveError(error)
-                    self.fetchTasks(showLoading: false)
+                    self.fetchTasks(showLoading: false, hideLoadingOnCompletion: false)
                 case .success:
                     break
                 }
@@ -70,7 +69,7 @@ public final class TaskListInteractor: TaskListInteractorInput {
         }
     }
 
-    private func fetchTasks(showLoading: Bool) {
+    private func fetchTasks(showLoading: Bool, hideLoadingOnCompletion: Bool = true) {
         if showLoading {
             output?.didChangeLoading(true)
         }
@@ -79,7 +78,9 @@ public final class TaskListInteractor: TaskListInteractorInput {
             Task { @MainActor in
                 guard let self else { return }
 
-                self.output?.didChangeLoading(false)
+                if hideLoadingOnCompletion {
+                    self.output?.didChangeLoading(false)
+                }
                 switch result {
                 case .failure(let error):
                     self.output?.didReceiveError(error)

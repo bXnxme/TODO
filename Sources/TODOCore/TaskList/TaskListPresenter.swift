@@ -53,7 +53,11 @@ public final class TaskListPresenter: TaskListPresenterInput {
 
     public func didDeleteTask(at index: Int) {
         guard tasks.indices.contains(index) else { return }
-        interactor.deleteTask(id: tasks[index].id)
+
+        let taskID = tasks[index].id
+        tasks.remove(at: index)
+        view?.deleteTask(at: index)
+        interactor.deleteTask(id: taskID)
     }
 
     public func didChangeCompletion(at index: Int, isCompleted: Bool) {

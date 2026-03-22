@@ -31,6 +31,7 @@ public struct TaskListItemViewModel: Equatable {
 @MainActor
 public protocol TaskListView: AnyObject {
     func display(tasks: [TaskListItemViewModel])
+    func deleteTask(at index: Int)
     func displayLoading(_ isLoading: Bool)
     func displayError(message: String)
 }

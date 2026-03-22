@@ -13,6 +13,7 @@
 		2D6B6519B1AB6E6F69C58876 /* TaskRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D2E49D5C55C308EAADDA64 /* TaskRepository.swift */; };
 		38DCA06B78ECE36112398F8C /* TODOCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F17D9C3B93A2469BE678D8BD /* TODOCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3E7599043E70519E7CCF0040 /* TODOCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F17D9C3B93A2469BE678D8BD /* TODOCore.framework */; };
+		464B1167AF4BD31C71B69057 /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3174B0990068411AD3A102C7 /* RootNavigationController.swift */; };
 		6444F0648A2EE2113545E5C5 /* TaskDetailRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 629C2592E407F442EE930585 /* TaskDetailRouter.swift */; };
 		753BD5013A7DCDACB287B4C4 /* TODOCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F17D9C3B93A2469BE678D8BD /* TODOCore.framework */; };
 		79884290E51FF44A7698310A /* TaskListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811404412103E968E5E4B4A1 /* TaskListViewController.swift */; };
@@ -32,6 +33,7 @@
 		AB7524F57B71B036F9800DE7 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFD5340728EBD6D82C30A22 /* CoreDataStack.swift */; };
 		AD4A46FC6D4FA5558ADA953A /* CoreDataTaskRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B18785F255F12E9F85FDB2 /* CoreDataTaskRepository.swift */; };
 		AE2DBEDA23AEC5B9C59AA151 /* AppSettingsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9F6E60D6961C4176D83D5B /* AppSettingsStorage.swift */; };
+		BD8A384AEBB5E55DA8F3C30E /* TaskListInteractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B6CD3E7CD97F078CDA9CA2 /* TaskListInteractorTests.swift */; };
 		BDAB0FC16199F8609FF51302 /* TaskDetailInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49C036A2BFB25310DA59A9A /* TaskDetailInteractor.swift */; };
 		BF1B0E9AD0F4576CAE495C96 /* TaskListBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06D221FD1FFF2B1DDA49018 /* TaskListBuilder.swift */; };
 		BF7941ECCB9D0F5DCA3728FA /* TaskDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC18E79E0BFF92AE1120A2E /* TaskDetailViewController.swift */; };
@@ -95,6 +97,8 @@
 		17AA59FF9597BF1964F430B2 /* TaskListContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListContracts.swift; sourceTree = "<group>"; };
 		1AFD5340728EBD6D82C30A22 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		1E6DA323350C37AF49A350FF /* TODOApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TODOApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		26B6CD3E7CD97F078CDA9CA2 /* TaskListInteractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListInteractorTests.swift; sourceTree = "<group>"; };
+		3174B0990068411AD3A102C7 /* RootNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootNavigationController.swift; sourceTree = "<group>"; };
 		3FC18E79E0BFF92AE1120A2E /* TaskDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailViewController.swift; sourceTree = "<group>"; };
 		42B18785F255F12E9F85FDB2 /* CoreDataTaskRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTaskRepository.swift; sourceTree = "<group>"; };
 		582CE51A573DE5425A4B60B9 /* UncheckedSendableBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UncheckedSendableBox.swift; sourceTree = "<group>"; };
@@ -233,6 +237,7 @@
 				8455089C989300B33DDEB2E4 /* DummyJSONTodoMapperTests.swift */,
 				CD08A6FBE02E47D327C3169F /* InitialTaskLoaderTests.swift */,
 				E0AA53547D07FA0399EB366C /* TaskDetailPresenterTests.swift */,
+				26B6CD3E7CD97F078CDA9CA2 /* TaskListInteractorTests.swift */,
 				1203A0D6E77290ACAD7D71CC /* TaskListPresenterTests.swift */,
 			);
 			name = TODOCoreTests;
@@ -264,6 +269,7 @@
 			children = (
 				A44987FDEFC5031EEB7BDDE7 /* AppDelegate.swift */,
 				EBC0F6758C04B761000BD50B /* AppTheme.swift */,
+				3174B0990068411AD3A102C7 /* RootNavigationController.swift */,
 			);
 			name = App;
 			path = TODOApp/App;
@@ -385,6 +391,7 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					57EEF105D9B6267FB287F108 = {
+						DevelopmentTeam = C4HJ5GT7MQ;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -443,6 +450,7 @@
 				D549F8965BC78DD9A7F7E4D3 /* AppDelegate.swift in Sources */,
 				A36700648C1F301F44CE70DD /* AppDependencyContainer.swift in Sources */,
 				9361C4FD67C347F05AC16A0E /* AppTheme.swift in Sources */,
+				464B1167AF4BD31C71B69057 /* RootNavigationController.swift in Sources */,
 				9E926D3C233244F290997BB3 /* TaskCell.swift in Sources */,
 				9C76766E0D1C9EF6430D4B51 /* TaskDetailBuilder.swift in Sources */,
 				6444F0648A2EE2113545E5C5 /* TaskDetailRouter.swift in Sources */,
@@ -461,6 +469,7 @@
 				A17031D2AB64BF06A867C7F2 /* DummyJSONTodoMapperTests.swift in Sources */,
 				AB142C02765109DAA0953338 /* InitialTaskLoaderTests.swift in Sources */,
 				C43CD5D62B11E86AD927BD79 /* TaskDetailPresenterTests.swift in Sources */,
+				BD8A384AEBB5E55DA8F3C30E /* TaskListInteractorTests.swift in Sources */,
 				0FA2D8651130165ABAE5D0AB /* TaskListPresenterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -536,6 +545,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -556,6 +566,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 6.0;
@@ -588,6 +599,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -607,8 +619,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = C4HJ5GT7MQ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = TODO;
 				INFOPLIST_KEY_LSRequiresIPhoneOS = YES;
@@ -621,7 +635,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.polzovatel.todo.app;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -663,6 +677,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -676,6 +691,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 6.0;
@@ -691,6 +707,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -710,8 +727,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = C4HJ5GT7MQ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = TODO;
 				INFOPLIST_KEY_LSRequiresIPhoneOS = YES;
@@ -724,7 +743,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.polzovatel.todo.app;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

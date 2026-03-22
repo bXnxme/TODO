@@ -14,6 +14,7 @@ final class TaskDetailViewController: UIViewController {
     private let descriptionTextView = UITextView()
     private let descriptionPlaceholderLabel = UILabel()
     private let completionStackView = UIStackView()
+    private let completionToggleButton = UIButton(type: .system)
     private let completionButton = UIButton(type: .system)
     private let completionLabel = UILabel()
     private var completionContainerHeightConstraint: NSLayoutConstraint?
@@ -38,6 +39,11 @@ final class TaskDetailViewController: UIViewController {
     private func configureUI() {
         view.backgroundColor = AppTheme.background
         view.insetsLayoutMarginsFromSafeArea = false
+
+        let dismissKeyboardTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleBackgroundTapped))
+        dismissKeyboardTapGesture.cancelsTouchesInView = false
+        dismissKeyboardTapGesture.delegate = self
+        view.addGestureRecognizer(dismissKeyboardTapGesture)
 
         scrollView.keyboardDismissMode = .interactive
         scrollView.alwaysBounceVertical = true
@@ -92,9 +98,12 @@ final class TaskDetailViewController: UIViewController {
         completionStackView.alignment = .center
         completionStackView.spacing = 10
 
+        completionToggleButton.backgroundColor = .clear
+        completionToggleButton.addTarget(self, action: #selector(handleCompletionTapped), for: .touchUpInside)
+
         completionButton.tintColor = AppTheme.secondaryText
         completionButton.contentHorizontalAlignment = .leading
-        completionButton.addTarget(self, action: #selector(handleCompletionTapped), for: .touchUpInside)
+        completionButton.isUserInteractionEnabled = false
 
         completionLabel.text = "Выполнено"
         completionLabel.textColor = AppTheme.secondaryText
@@ -110,6 +119,7 @@ final class TaskDetailViewController: UIViewController {
         contentView.addSubview(descriptionTextView)
         descriptionTextView.addSubview(descriptionPlaceholderLabel)
         completionContainerView.addSubview(completionStackView)
+        completionContainerView.addSubview(completionToggleButton)
         completionStackView.addArrangedSubview(completionLabel)
         completionStackView.addArrangedSubview(completionButton)
 
@@ -117,6 +127,7 @@ final class TaskDetailViewController: UIViewController {
         contentView.translatesAutoresizingMaskIntoConstraints = false
         completionContainerView.translatesAutoresizingMaskIntoConstraints = false
         completionStackView.translatesAutoresizingMaskIntoConstraints = false
+        completionToggleButton.translatesAutoresizingMaskIntoConstraints = false
         backButton.translatesAutoresizingMaskIntoConstraints = false
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         titleField.translatesAutoresizingMaskIntoConstraints = false
@@ -175,6 +186,11 @@ final class TaskDetailViewController: UIViewController {
             completionStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -18),
             completionStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
 
+            completionToggleButton.leadingAnchor.constraint(equalTo: completionStackView.leadingAnchor, constant: -8),
+            completionToggleButton.trailingAnchor.constraint(equalTo: completionStackView.trailingAnchor, constant: 8),
+            completionToggleButton.topAnchor.constraint(equalTo: completionStackView.topAnchor, constant: -8),
+            completionToggleButton.bottomAnchor.constraint(equalTo: completionStackView.bottomAnchor, constant: 8),
+
             completionButton.widthAnchor.constraint(equalToConstant: 28),
             completionButton.heightAnchor.constraint(equalToConstant: 28),
             completionLabel.leadingAnchor.constraint(greaterThanOrEqualTo: completionContainerView.leadingAnchor, constant: 18)
@@ -209,10 +225,19 @@ final class TaskDetailViewController: UIViewController {
         presenter?.didChangeCompletion(isCompleted: isCompleted)
     }
 
+    @objc
+    private func handleBackgroundTapped() {
+        view.endEditing(true)
+    }
+
     private func updateCompletionAppearance() {
         let imageName = isCompleted ? "checkmark.circle.fill" : "circle"
         completionButton.setImage(UIImage(systemName: imageName), for: .normal)
         completionButton.tintColor = isCompleted ? AppTheme.accent : AppTheme.secondaryText
+        completionLabel.textColor = isCompleted ? AppTheme.primaryText : AppTheme.secondaryText
+        completionToggleButton.accessibilityLabel = "Выполнено"
+        completionToggleButton.accessibilityValue = isCompleted ? "Да" : "Нет"
+        completionToggleButton.accessibilityTraits = isCompleted ? [.button, .selected] : .button
     }
 
     private func updateDescriptionPlaceholder() {
@@ -248,7 +273,7 @@ extension TaskDetailViewController: TaskDetailView {
         backButton.isEnabled = !isSaving
         titleField.isEnabled = !isSaving
         descriptionTextView.isEditable = !isSaving
-        completionButton.isEnabled = !isSaving
+        completionToggleButton.isEnabled = !isSaving
     }
 
     func displayError(message: String) {
@@ -266,5 +291,17 @@ extension TaskDetailViewController: UITextFieldDelegate {
 extension TaskDetailViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         updateDescriptionPlaceholder()
+    }
+}
+
+extension TaskDetailViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        guard let touchedView = touch.view else { return true }
+
+        if touchedView.isDescendant(of: titleField) || touchedView.isDescendant(of: descriptionTextView) {
+            return false
+        }
+
+        return true
     }
 }
